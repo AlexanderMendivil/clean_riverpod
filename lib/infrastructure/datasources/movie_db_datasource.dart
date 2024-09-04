@@ -1,6 +1,8 @@
 import 'package:clean_riverpod/config/constants/environment.dart';
 import 'package:clean_riverpod/domain/datasources/movies_datasource.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
+import 'package:clean_riverpod/infrastructure/mappers/movie_mapper.dart';
+import 'package:clean_riverpod/infrastructure/models/moviedb/moviedb_response.dart';
 import 'package:dio/dio.dart';
 
 class MovieDBDataSource extends MovieDataSource {
@@ -16,8 +18,13 @@ class MovieDBDataSource extends MovieDataSource {
       final response = await dio.get('/movie/now_playing', queryParameters: {
         'page': page,
       });
-      
-      return [];
+
+      final List<Movie> movies = MovieDbResponse.fromJson(response.data)
+          .results
+          .where((movie) => movie.posterPath != '')
+          .map((movie) => MovieMapper.movieDBToEntity(movie))
+          .toList();
+      return movies;
     } catch (e) {
       throw Exception(e);
     }
