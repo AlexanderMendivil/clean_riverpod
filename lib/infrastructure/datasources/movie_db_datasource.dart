@@ -18,7 +18,7 @@ class MovieDBDataSource extends MovieDataSource {
       final response = await dio.get('/movie/now_playing', queryParameters: {
         'page': page,
       });
-
+    
       final List<Movie> movies = MovieDbResponse.fromJson(response.data)
           .results
           .where((movie) => movie.posterPath != '')

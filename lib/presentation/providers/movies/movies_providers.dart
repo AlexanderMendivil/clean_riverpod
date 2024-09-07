@@ -10,14 +10,17 @@ typedef MovieCallback = Future<List<Movie>> Function({int page});
 class MovieNotifier extends _$MovieNotifier {
   @override
   MovieRepositoryState build() {
-    final fetchMoreMovies = ref.watch(movieRepositoryProviderProvider).getNowPlayingMovies;
+    final fetchMoreMovies =
+        ref.watch(movieRepositoryProviderProvider).getNowPlayingMovies;
     return MovieRepositoryState(fetchMoreMovies: fetchMoreMovies);
   }
 
   Future<void> loadNextPage() async {
-    state = state.copyWith(currentPage: state.currentPage++);
-    final List<Movie> movies = await state.fetchMoreMovies!(page: state.currentPage);
-    state = state.copyWith(movies: [...state.movies!, ...movies]);    
+    final List<Movie> movies =
+        await state.fetchMoreMovies(page: state.currentPage);
+    state = state.copyWith(
+        movies: [...state.movies!, ...movies],
+        currentPage: state.currentPage++);
   }
 }
 
@@ -26,14 +29,14 @@ class MovieRepositoryState {
   bool? isLoading;
   int currentPage;
   String? error;
-  MovieCallback? fetchMoreMovies;
+  final MovieCallback fetchMoreMovies;
 
   MovieRepositoryState({
-    this.movies,
+    this.movies = const [],
     this.isLoading,
     this.error,
-    this.currentPage = 0,
-    this.fetchMoreMovies,
+    this.currentPage = 1,
+    required this.fetchMoreMovies,
   });
 
   MovieRepositoryState copyWith({
@@ -41,15 +44,12 @@ class MovieRepositoryState {
     bool? isLoading,
     String? error,
     int? currentPage,
-    MovieCallback? fetchMoreMovies,
   }) {
     return MovieRepositoryState(
-      movies: movies ?? this.movies,
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      currentPage: currentPage ?? this.currentPage,
-      fetchMoreMovies: fetchMoreMovies ?? this.fetchMoreMovies
-      
-    );
+        movies: movies ?? this.movies,
+        isLoading: isLoading ?? this.isLoading,
+        error: error ?? this.error,
+        currentPage: currentPage ?? this.currentPage,
+        fetchMoreMovies: fetchMoreMovies);
   }
 }
