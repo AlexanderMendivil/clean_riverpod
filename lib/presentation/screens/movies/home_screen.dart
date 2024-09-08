@@ -1,4 +1,5 @@
 import 'package:clean_riverpod/presentation/providers/movies/movies_providers.dart';
+import 'package:clean_riverpod/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,13 +36,21 @@ class _HomeViewState extends ConsumerState<HomeView> {
     if (movies == null) {
       return const Center(child: CircularProgressIndicator());
     }
-    return ListView.builder(
-        itemCount: movies.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(movies[index].title),
-            subtitle: Text(movies[index].overview!),
-          );
-        });
+    return Column(
+      children: [
+
+        CustomAppBar(),
+        Expanded(
+          child: ListView.builder(
+              itemCount: movies.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(movies[index].title),
+                  subtitle: Text(movies[index].overview!),
+                );
+              }),
+        ),
+      ],
+    );
   }
 }
