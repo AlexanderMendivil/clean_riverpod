@@ -25,7 +25,7 @@ class MovieNotifier extends _$MovieNotifier {
 }
 
 class MovieRepositoryState {
-  List<Movie>? movies;
+  List<Movie> movies;
   bool? isLoading;
   int currentPage;
   String? error;
