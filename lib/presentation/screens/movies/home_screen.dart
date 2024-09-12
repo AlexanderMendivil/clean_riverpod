@@ -35,7 +35,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    //final movies = ref.watch(movieNotifierProvider).movies;
+    final movies = ref.watch(movieNotifierProvider).movies;
     final sublistMovie = ref.watch(moviesSlideShowProvider);
 
     if (sublistMovie.isEmpty) {
@@ -44,8 +44,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
     return Column(
       children: [
         const CustomAppBar(),
-
         MoviesSlideshow(movies: sublistMovie.sublist(0, 6)),
+        MovieHorizontalListview(movies: movies, title: 'label', subTitle: 'subTitle'),
         
       ],
     );
