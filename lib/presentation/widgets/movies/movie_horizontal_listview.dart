@@ -100,12 +100,11 @@ class _Slide extends StatelessWidget {
               Text(
                 movie.popularity.toString(),
                 style: textTheme.bodySmall),
+              ]
               )
             ],
-          )
-        ],
-      ),
-    );
+          )  ,      
+      );    
   }
 }
 
