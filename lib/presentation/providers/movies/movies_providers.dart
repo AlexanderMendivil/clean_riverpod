@@ -19,7 +19,7 @@ class MovieNotifier extends _$MovieNotifier {
     final List<Movie> movies =
         await state.fetchMoreMovies(page: state.currentPage);
     state = state.copyWith(
-        movies: [...state.movies!, ...movies],
+        movies: [...state.movies, ...movies],
         currentPage: state.currentPage++);
   }
 }

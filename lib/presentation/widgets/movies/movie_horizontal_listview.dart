@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:clean_riverpod/config/helpers/human_formats.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
@@ -93,12 +94,12 @@ class _Slide extends StatelessWidget {
               ),
               const SizedBox(width: 5,),
               Text(
-                movie.voteAverage.toString(),
+                 movie.voteAverage.toString(),
                 style: textTheme.bodyMedium!.copyWith(color: Colors.yellow[800]),
               ),
               const SizedBox(width: 5,),
               Text(
-                movie.popularity.toString(),
+                HumanFormats.number(formattedNumber:  movie.popularity),
                 style: textTheme.bodySmall),
               ]
               )

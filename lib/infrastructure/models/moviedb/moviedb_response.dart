@@ -68,6 +68,7 @@ class Dates {
       };
 }
 
+// ignore: constant_identifier_names
 enum OriginalLanguage { EN, HI, ZH }
 
 final originalLanguageValues = EnumValues({

@@ -31,7 +31,7 @@ class MoviesSlideshow extends StatelessWidget {
 
 class _Slide extends StatelessWidget {
   final Movie movie;
-  const _Slide({super.key, required this.movie});
+  const _Slide({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,7 @@ class _Slide extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(movie.backdropPath!, fit: BoxFit.cover, loadingBuilder: (context, child, loading){
-            print("loading: $loading");
+          child: Image.network(movie.backdropPath!, fit: BoxFit.cover, loadingBuilder: (context, child, loading){            
             if (loading == null) {
               return FadeIn(child: child);
             }
