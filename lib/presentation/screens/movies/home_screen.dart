@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return const Scaffold(
       body: HomeView(),
       bottomNavigationBar: CustomBottomNavigationBar(),
-      );
+    );
   }
 }
 
@@ -45,8 +45,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
       children: [
         const CustomAppBar(),
         MoviesSlideshow(movies: sublistMovie.sublist(0, 6)),
-        MovieHorizontalListview(movies: movies, title: 'En cines', subTitle: 'Lunes 20'),
-        
+        MovieHorizontalListview(
+          movies: movies,
+          title: 'En cines',
+          subTitle: 'Lunes 20',
+          nextPage: () =>
+              ref.read(movieNotifierProvider.notifier).loadNextPage(),
+        ),
       ],
     );
   }

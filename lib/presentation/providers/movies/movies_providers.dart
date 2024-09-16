@@ -16,11 +16,14 @@ class MovieNotifier extends _$MovieNotifier {
   }
 
   Future<void> loadNextPage() async {
+    
     final List<Movie> movies =
         await state.fetchMoreMovies(page: state.currentPage);
+        final newPage = state.currentPage + 1;
+        
     state = state.copyWith(
         movies: [...state.movies, ...movies],
-        currentPage: state.currentPage++);
+        currentPage: newPage);
   }
 }
 
@@ -45,6 +48,8 @@ class MovieRepositoryState {
     String? error,
     int? currentPage,
   }) {
+
+    print("not incre: $currentPage");
     return MovieRepositoryState(
         movies: movies ?? this.movies,
         isLoading: isLoading ?? this.isLoading,
