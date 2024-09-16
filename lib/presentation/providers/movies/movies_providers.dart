@@ -47,9 +47,7 @@ class MovieRepositoryState {
     bool? isLoading,
     String? error,
     int? currentPage,
-  }) {
-
-    print("not incre: $currentPage");
+  }) {    
     return MovieRepositoryState(
         movies: movies ?? this.movies,
         isLoading: isLoading ?? this.isLoading,
