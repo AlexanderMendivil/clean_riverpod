@@ -8,6 +8,7 @@ typedef MovieCallback = Future<List<Movie>> Function({int page});
 
 @riverpod
 class MovieNotifier extends _$MovieNotifier {
+  
   @override
   MovieRepositoryState build() {
     final fetchMoreMovies =
@@ -15,15 +16,18 @@ class MovieNotifier extends _$MovieNotifier {
     return MovieRepositoryState(fetchMoreMovies: fetchMoreMovies);
   }
 
-  Future<void> loadNextPage() async {
-    
+  Future<void> loadNextPage({bool isInitial = false}) async {
+    if(state.isLoading!) return;
+
+    if(!isInitial){
+      state = state.copyWith(isLoading: true);
+    }
     final List<Movie> movies =
         await state.fetchMoreMovies(page: state.currentPage);
-        final newPage = state.currentPage + 1;
-        
+        final newPage = state.currentPage + 1;        
     state = state.copyWith(
-        movies: [...state.movies, ...movies],
-        currentPage: newPage);
+        movies: [...state.movies, ...movies,],
+        currentPage: newPage, isLoading: false);
   }
 }
 
@@ -36,7 +40,7 @@ class MovieRepositoryState {
 
   MovieRepositoryState({
     this.movies = const [],
-    this.isLoading,
+    this.isLoading = false,
     this.error,
     this.currentPage = 1,
     required this.fetchMoreMovies,

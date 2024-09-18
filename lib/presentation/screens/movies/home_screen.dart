@@ -30,7 +30,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   void initState() {
     super.initState();
-    ref.read(movieNotifierProvider.notifier).loadNextPage();
+    ref.read(movieNotifierProvider.notifier).loadNextPage(isInitial: true);
   }
 
   @override
