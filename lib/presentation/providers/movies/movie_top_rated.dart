@@ -3,14 +3,13 @@ import 'package:clean_riverpod/presentation/providers/movies/movie_repository_pr
 import 'package:clean_riverpod/presentation/providers/movies/movies_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'movies_providers.g.dart';
+part 'movie_top_rated.g.dart';
+
 @riverpod
-class MovieNotifier extends _$MovieNotifier {
-  
+class MovieTopRatedNotifier extends _$MovieTopRatedNotifier {
   @override
   MovieRepositoryState build() {
-    final fetchMoreMovies =
-        ref.watch(movieRepositoryProviderProvider).getNowPlayingMovies;
+    final fetchMoreMovies = ref.watch(movieRepositoryProviderProvider).getTopRatedMovies;
     return MovieRepositoryState(fetchMoreMovies: fetchMoreMovies);
   }
 
@@ -27,5 +26,4 @@ class MovieNotifier extends _$MovieNotifier {
         movies: [...state.movies, ...movies,],
         currentPage: newPage, isLoading: false);
   }
-  
 }

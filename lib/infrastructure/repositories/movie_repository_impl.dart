@@ -14,4 +14,31 @@ class MovieRepositoryImpl extends MovieRepository {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<List<Movie>> getPopularMovies({int page = 1}) async {
+    try {
+      return await dataSource.getPopularMovies(page: page);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  
+  @override
+  Future<List<Movie>> getTopRatedMovies({int page = 1}) async {
+    try {
+      return await dataSource.getTopRatedMovies(page: page);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  
+  @override
+  Future<List<Movie>> getUpcomingMovies({int page = 1}) async {
+    try {
+      return await dataSource.getUpcomingMovies(page: page);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

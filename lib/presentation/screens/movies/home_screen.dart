@@ -1,3 +1,6 @@
+import 'package:clean_riverpod/presentation/providers/movies/movie_popular.dart';
+import 'package:clean_riverpod/presentation/providers/movies/movie_top_rated.dart';
+import 'package:clean_riverpod/presentation/providers/movies/movie_upcoming.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movies_providers.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movies_slideshow_provider.dart';
 import 'package:clean_riverpod/presentation/widgets/widgets.dart';
@@ -31,11 +34,17 @@ class _HomeViewState extends ConsumerState<HomeView> {
   void initState() {
     super.initState();
     ref.read(movieNotifierProvider.notifier).loadNextPage(isInitial: true);
+    ref.read(moviePopularNotifierProvider.notifier).loadNextPage(isInitial: true);
+    ref.read(movieUpcomingNotifierProvider.notifier).loadNextPage(isInitial: true);
+    ref.read(movieTopRatedNotifierProvider.notifier).loadNextPage(isInitial: true);
   }
 
   @override
   Widget build(BuildContext context) {
     final movies = ref.watch(movieNotifierProvider).movies;
+    final popularMovies = ref.watch(moviePopularNotifierProvider).movies;
+    final upcomingMovies = ref.watch(movieUpcomingNotifierProvider).movies;
+    final topRatedMovies = ref.watch(movieTopRatedNotifierProvider).movies;
     final sublistMovie = ref.watch(moviesSlideShowProvider);
 
     if (sublistMovie.isEmpty) {
@@ -64,18 +73,25 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     ref.read(movieNotifierProvider.notifier).loadNextPage(),
               ),
               MovieHorizontalListview(
-                movies: movies,
+                movies: upcomingMovies,
                 title: 'Proximamente',
                 subTitle: 'Lunes 20',
                 nextPage: () =>
-                    ref.read(movieNotifierProvider.notifier).loadNextPage(),
+                    ref.read(movieUpcomingNotifierProvider.notifier).loadNextPage(),
               ),
               MovieHorizontalListview(
-                movies: movies,
+                movies: popularMovies,
                 title: 'Populares',
                 subTitle: 'Lunes 20',
                 nextPage: () =>
-                    ref.read(movieNotifierProvider.notifier).loadNextPage(),
+                    ref.read(moviePopularNotifierProvider.notifier).loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: topRatedMovies,
+                title: 'Mejor calificadas',
+                subTitle: 'Lunes 20',
+                nextPage: () =>
+                    ref.read(movieTopRatedNotifierProvider.notifier).loadNextPage(),
               ),
             ],
           );
