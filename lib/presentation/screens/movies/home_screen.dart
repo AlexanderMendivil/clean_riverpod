@@ -1,3 +1,4 @@
+import 'package:clean_riverpod/presentation/providers/movies/initial_loading.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_popular.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_top_rated.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_upcoming.dart';
@@ -41,15 +42,20 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+
+    final isLoading = ref.watch(initialLoadingProvider);
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    
     final movies = ref.watch(movieNotifierProvider).movies;
     final popularMovies = ref.watch(moviePopularNotifierProvider).movies;
     final upcomingMovies = ref.watch(movieUpcomingNotifierProvider).movies;
     final topRatedMovies = ref.watch(movieTopRatedNotifierProvider).movies;
     final sublistMovie = ref.watch(moviesSlideShowProvider);
 
-    if (sublistMovie.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
+
 
     return CustomScrollView(slivers: [
       const SliverAppBar(
