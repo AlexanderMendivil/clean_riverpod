@@ -9,6 +9,13 @@ class MovieScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Movie Screen'),
+      ),
+      body: Center(
+        child: Text('Movie Screen: $movieId'),
+      ),
+    );
   }
 }

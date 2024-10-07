@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:clean_riverpod/config/helpers/human_formats.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
+import 'package:clean_riverpod/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
@@ -89,19 +91,22 @@ class _Slide extends StatelessWidget {
             width: 150,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-                width: 150,
-                loadingBuilder: (_, child, loading) {
-                  if (loading == null) {
-                    return FadeIn(child: child);
-                  }
-                  return const Center(
-                      child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ));
-                },
+              child: GestureDetector(
+                onTap: () => context.push('/movie/${movie.id}'),
+                child: Image.network(
+                  movie.posterPath,
+                  fit: BoxFit.cover,
+                  width: 150,
+                  loadingBuilder: (_, child, loading) {
+                    if (loading == null) {
+                      return FadeIn(child: child);
+                    }
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ));
+                  },
+                ),
               ),
             ),
           ),
