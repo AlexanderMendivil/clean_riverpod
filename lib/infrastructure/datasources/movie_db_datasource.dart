@@ -2,6 +2,7 @@ import 'package:clean_riverpod/config/constants/environment.dart';
 import 'package:clean_riverpod/domain/datasources/movies_datasource.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
 import 'package:clean_riverpod/infrastructure/mappers/movie_mapper.dart';
+import 'package:clean_riverpod/infrastructure/models/moviedb/movie_details.dart';
 import 'package:clean_riverpod/infrastructure/models/moviedb/moviedb_response.dart';
 import 'package:dio/dio.dart';
 
@@ -71,5 +72,18 @@ class MovieDBDataSource extends MovieDataSource {
     } catch (e) {
       throw Exception(e);
     }   
+  }
+  
+  @override
+  Future<Movie> getMovieDetail(String id) async{
+    try{
+      final response = await dio.get('/movie/$id');
+
+      final movieDB = MovieDetails.fromJson(response.data);
+
+      return MovieMapper.movieDetailsToEntity(movieDB);
+    }catch(e){
+      throw Exception(e);
+    }
   }
 }

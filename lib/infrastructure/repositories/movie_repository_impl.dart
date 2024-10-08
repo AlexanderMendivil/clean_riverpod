@@ -41,4 +41,10 @@ class MovieRepositoryImpl extends MovieRepository {
       throw Exception(e);
     }
   }
+  
+  @override
+  Future<Movie> getMovieDetail(String id) {
+    // TODO: implement getMovieDetail
+    throw UnimplementedError();
+  }
 }
