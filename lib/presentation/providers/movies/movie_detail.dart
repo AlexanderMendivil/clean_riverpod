@@ -5,27 +5,30 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'movie_detail.g.dart';
 
 typedef MovieDetailCallback = Future<Movie> Function(String movieId);
-@riverpod
+
+@Riverpod(keepAlive: true)
 class MovieDetailNotifier extends _$MovieDetailNotifier {
+  
   @override
-  MovieDetailState build() {
-    final fetchMovieDetail = ref.watch(movieRepositoryProviderProvider).getMovieDetail;
-    return MovieDetailState(fetchMovieDetail: fetchMovieDetail);
-  }
-
+  MovieDetailState build() {       
+      final fetchMovieDetail = ref.read(movieRepositoryProviderProvider).getMovieDetail;        
+      return MovieDetailState(fetchMovieDetail: fetchMovieDetail);    
+      }
+      
   Future<void> loadMovieDetail(String movieId, {bool isInitial = false}) async {
-
-    if(state.movie != null ){
+        
+    if(state.movie != null && movieId == state.movie!.id.toString()){
       return;
     }
     if (state.loading!) return;
 
     if(!isInitial){
       state = state.copyWith(loading: true);
-    }
+    }    
+    
     final Movie movie = await state.fetchMovieDetail!(movieId);
-    state = state.copyWith(movie: movie);
-
+    state = state.copyWith(movie: movie, loading: false);
+    
   }
 }
 
@@ -36,7 +39,7 @@ class MovieDetailState {
 
   MovieDetailState({this.movie, this.fetchMovieDetail, this.loading = false});
 
-  MovieDetailState copyWith({Movie? movie, MovieDetailCallback? fetchMovieDetail, bool? loading}) {
+  MovieDetailState copyWith({Movie? movie, MovieDetailCallback? fetchMovieDetail, bool? loading}) {    
     return MovieDetailState(movie: movie ?? this.movie, fetchMovieDetail: fetchMovieDetail ?? this.fetchMovieDetail);
   }
 }

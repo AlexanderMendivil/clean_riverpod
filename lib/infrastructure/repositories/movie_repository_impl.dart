@@ -44,7 +44,7 @@ class MovieRepositoryImpl extends MovieRepository {
   
   @override
   Future<Movie> getMovieDetail(String id) async {  
-    try{
+    try{    
       return await dataSource.getMovieDetail(id);
     }catch(e){
       throw Exception(e);

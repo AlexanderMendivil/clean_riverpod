@@ -16,12 +16,12 @@ class MovieScreen extends ConsumerStatefulWidget {
 class _MovieScreenState extends ConsumerState<MovieScreen> {
   @override
   void initState() {    
-    super.initState();
+    super.initState();  
     ref.read(movieDetailNotifierProvider.notifier).loadMovieDetail(widget.movieId, isInitial: true);
   }
 @override
   Widget build(BuildContext context) {
-    final movie = ref.watch(movieDetailNotifierProvider).movie;
+    final state = ref.watch(movieDetailNotifierProvider);
 
 
     return Scaffold(
@@ -29,7 +29,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
         title: const Text('Movie Screen'),
       ),
       body: Center(
-        child: Text('Movie Screen: ${movie?.originalTitle}'),
+        child: state.movie == null || state.movie?.id.toString() != widget.movieId ? const CircularProgressIndicator() :  Text('Movie Screen: ${state.movie?.originalTitle}'),
       ),
     );
   }

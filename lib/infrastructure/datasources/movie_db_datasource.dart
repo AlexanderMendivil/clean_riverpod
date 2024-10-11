@@ -77,6 +77,8 @@ class MovieDBDataSource extends MovieDataSource {
   @override
   Future<Movie> getMovieDetail(String id) async{
     try{
+
+      print("gets here");
       final response = await dio.get('/movie/$id');
 
       final movieDB = MovieDetails.fromJson(response.data);
