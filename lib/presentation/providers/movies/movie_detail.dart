@@ -20,7 +20,7 @@ class MovieDetailNotifier extends _$MovieDetailNotifier {
     if(state.movie != null && movieId == state.movie!.id.toString()){
       return;
     }
-    if (state.loading!) return;
+    if (state.loading) return;
 
     if(!isInitial){
       state = state.copyWith(loading: true);
@@ -35,7 +35,7 @@ class MovieDetailNotifier extends _$MovieDetailNotifier {
 class MovieDetailState {
   Movie? movie;
   MovieDetailCallback? fetchMovieDetail;
-  bool? loading;
+  bool loading;
 
   MovieDetailState({this.movie, this.fetchMovieDetail, this.loading = false});
 

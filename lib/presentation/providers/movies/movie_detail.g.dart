@@ -7,7 +7,7 @@ part of 'movie_detail.dart';
 // **************************************************************************
 
 String _$movieDetailNotifierHash() =>
-    r'57d602202728948c5d633ee6eb31d90318b4a5b8';
+    r'a721dd6faddb187f31f07c9650e7f1d5d7d6bd94';
 
 /// See also [MovieDetailNotifier].
 @ProviderFor(MovieDetailNotifier)
