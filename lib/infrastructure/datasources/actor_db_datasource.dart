@@ -18,7 +18,6 @@ class ActorDbDatasource extends ActorsDatasource {
     try{
       final response = await dio.get('movie/$movieId/credits');      
       final actors = ActorMovieDb.fromJson(response.data).cast.map((cast) => ActorMapper.actorDBtoActor(cast)).toList();
-
       return actors;
     }catch(e){
       throw Exception(e);
