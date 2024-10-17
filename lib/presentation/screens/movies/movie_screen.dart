@@ -1,4 +1,5 @@
 import 'package:clean_riverpod/domain/entities/movie.dart';
+import 'package:clean_riverpod/presentation/providers/actors/actors_provider.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,11 +21,14 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
     ref
         .read(movieDetailNotifierProvider.notifier)
         .loadMovieDetail(widget.movieId, isInitial: true);
+
+        ref.read(actorsProviderProvider.notifier).loadActors(movieId: widget.movieId);
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(movieDetailNotifierProvider);
+    final actors = ref.watch(actorsProviderProvider).actors;
 
     return state.movie == null || widget.movieId != state.movie!.id.toString()
         ? const Center(
