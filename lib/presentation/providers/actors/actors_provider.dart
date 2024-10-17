@@ -11,4 +11,10 @@ class ActorsProvider extends _$ActorsProvider {
     final fetchActors = ref.watch(actorRepositoryProviderProvider).getActorsByMovieId;
     return ActorsProviderState(fetchActors: fetchActors);
   }  
+
+
+  Future<void> loadActors({required String movieId}) async {
+    final actors =  await state.fetchActors(movieId);
+    state = state.copyWith(actors: actors);
+  }
 }
