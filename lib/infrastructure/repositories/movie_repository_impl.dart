@@ -50,4 +50,14 @@ class MovieRepositoryImpl extends MovieRepository {
       throw Exception(e);
     }
   }
+  
+  @override
+  Future<List<Movie>> getMoviesBySearchTerm(String term) async {
+    try{
+     return await dataSource.getMoviesBySearchTerm(term); 
+    }catch(e){
+      throw Exception(e);
+    }
+    
+  }
 }

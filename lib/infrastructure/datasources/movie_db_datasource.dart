@@ -78,7 +78,6 @@ class MovieDBDataSource extends MovieDataSource {
   Future<Movie> getMovieDetail(String id) async{
     try{
 
-      print("gets here");
       final response = await dio.get('/movie/$id');
 
       final movieDB = MovieDetails.fromJson(response.data);
@@ -87,5 +86,17 @@ class MovieDBDataSource extends MovieDataSource {
     }catch(e){
       throw Exception(e);
     }
+  }
+  
+  @override
+  Future<List<Movie>> getMoviesBySearchTerm(String term) async {
+    try{
+      final response = await dio.get('/search/movie', queryParameters: {
+        'query': term,
+      }); 
+      return _jsonToMovies(response.data);
+    }catch(e){
+      throw Exception(e);
+    }    
   }
 }
