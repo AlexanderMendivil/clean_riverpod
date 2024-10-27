@@ -1,3 +1,4 @@
+import 'package:clean_riverpod/domain/entities/actor.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
 import 'package:clean_riverpod/presentation/providers/actors/actors_provider.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_detail.dart';
@@ -28,9 +29,9 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(movieDetailNotifierProvider);
-    final actors = ref.watch(actorsProviderProvider).actors;
+    final actors = ref.watch(actorsProviderProvider).actors;    
 
-    return state.movie == null || widget.movieId != state.movie!.id.toString()
+    return state.movie == null || widget.movieId != state.movie!.id.toString() || actors.isEmpty
         ? const Center(
             child: CircularProgressIndicator(),
           )
@@ -44,6 +45,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                         (BuildContext _, int index) {
                   return _MovieDetails(
                     movie: state.movie!,
+                    actors: actors,
                   );
                 })),
               ],
@@ -54,7 +56,8 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
 
 class _MovieDetails extends StatelessWidget {
   final Movie movie;
-  const _MovieDetails({required this.movie});
+  final List<Actor> actors;
+  const _MovieDetails({required this.movie, required this.actors});
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +109,44 @@ class _MovieDetails extends StatelessWidget {
             ],
           ),
         ),
+        _ActorsByMovie(actors: actors,),
         const SizedBox(height: 100),
       ],
+    );
+  }
+}
+
+class _ActorsByMovie extends StatelessWidget {
+  final List<Actor> actors;
+  const _ActorsByMovie({
+    super.key,
+    required this.actors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return SizedBox(
+      height: 300,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (_, int index){
+    print(actors[index].profilePath);
+        return Container(
+          padding: const EdgeInsets.all(8),
+          width: 135,
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(actors[index].profilePath, height: 150, width: 135, fit: BoxFit.cover),
+              ),
+              Text(actors[index].name),
+              Text(actors[index].character ?? ''),
+            ],
+          ),
+        );
+      }, itemCount: actors.length),
     );
   }
 }
