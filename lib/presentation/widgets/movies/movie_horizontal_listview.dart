@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:clean_riverpod/config/helpers/human_formats.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
-import 'package:clean_riverpod/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

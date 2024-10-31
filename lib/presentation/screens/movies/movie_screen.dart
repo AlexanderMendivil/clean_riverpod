@@ -118,8 +118,7 @@ class _MovieDetails extends StatelessWidget {
 
 class _ActorsByMovie extends StatelessWidget {
   final List<Actor> actors;
-  const _ActorsByMovie({
-    super.key,
+  const _ActorsByMovie({    
     required this.actors,
   });
 
@@ -130,8 +129,7 @@ class _ActorsByMovie extends StatelessWidget {
       height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemBuilder: (_, int index){
-    print(actors[index].profilePath);
+        itemBuilder: (_, int index){    
         return Container(
           padding: const EdgeInsets.all(8),
           width: 135,
@@ -142,7 +140,7 @@ class _ActorsByMovie extends StatelessWidget {
                 child: Image.network(actors[index].profilePath, height: 150, width: 135, fit: BoxFit.cover),
               ),
               Text(actors[index].name),
-              Text(actors[index].character ?? ''),
+              Text(actors[index].character),
             ],
           ),
         );
@@ -153,7 +151,7 @@ class _ActorsByMovie extends StatelessWidget {
 
 class _CustomSliverAppBar extends StatelessWidget {
   final Movie movie;
-  const _CustomSliverAppBar({super.key, required this.movie});
+  const _CustomSliverAppBar({required this.movie});
 
   @override
   Widget build(BuildContext context) {
