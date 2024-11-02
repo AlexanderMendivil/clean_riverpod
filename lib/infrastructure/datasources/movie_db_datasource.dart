@@ -92,12 +92,10 @@ class MovieDBDataSource extends MovieDataSource {
   Future<List<Movie>> getMoviesBySearchTerm(String term) async {
     try{
 
-      print("term: $term");
       final response = await dio.get('/search/movie', queryParameters: {
         'query': term,
       }); 
-
-      print("has response: ${response.data}");
+      
       return _jsonToMovies(response.data);
     }catch(e){
       throw Exception(e);

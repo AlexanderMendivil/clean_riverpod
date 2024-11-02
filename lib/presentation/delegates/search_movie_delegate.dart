@@ -11,7 +11,28 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   String get searchFieldLabel => 'Search Movie';
 
   final SearchMoviesCallback searchMoviesCallback;
+  StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
+  Timer? _debounce;
+
   SearchMovieDelegate({required this.searchMoviesCallback});
+
+  void _disposeElements(){
+    if(!debounceMovies.isClosed) debounceMovies.close();
+    if(_debounce?.isActive ?? false) _debounce?.cancel();
+  }
+  void _onQueryChange(String query) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if(query.isEmpty){ 
+        debounceMovies.add([]);
+        return;
+      }
+
+      final movies = await searchMoviesCallback(query);
+      debounceMovies.add(movies);
+    });
+  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -31,6 +52,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
+        _disposeElements();
         close(context, null);
       },
     );
@@ -43,28 +65,43 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if(query.isEmpty){
-      return const Center(child: Text('Search for a movie'),);
+    if (query.isEmpty) {
+      return const Center(
+        child: Text('Search for a movie'),
+      );
     }
 
-    
-    return FutureBuilder(
-      future: Future.delayed(const Duration(milliseconds: 500),  () async => await searchMoviesCallback(query)),
-      builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
-        final movies = snapshot.data ?? [];
+    _onQueryChange(query);
 
-        return ListView.builder(
-          itemCount: movies.length,
-          itemBuilder: (_, index) => _MovieItem(movie: movies[index], close: close,),
+    return StreamBuilder(
+        stream: debounceMovies.stream,
+        builder: (_, snapshot) {
+          final movies = snapshot.data ?? [];
+
+          return ListView.builder(
+          itemCount: movies!.length,
+          itemBuilder: (_, index) => _MovieItem(
+            movie: movies[index],
+            close: (context, movie) {
+              close(context, movie);
+              _disposeElements();
+            },
+          ),
         );
-      },
-    );
+        });
+  }
+
+  @override
+  void dispose() {    
+    _disposeElements();
+    super.dispose();
   }
 }
 
 class _MovieItem extends StatelessWidget {
   const _MovieItem({
-    required this.movie, required this.close,
+    required this.movie,
+    required this.close,
   });
 
   final Movie movie;
