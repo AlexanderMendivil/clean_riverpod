@@ -1,6 +1,7 @@
 import 'package:clean_riverpod/domain/entities/movie.dart';
 import 'package:clean_riverpod/presentation/delegates/search_movie_delegate.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_repository_provider.dart';
+import 'package:clean_riverpod/presentation/providers/search/search_movies_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +12,9 @@ class CustomAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final movieReposiryProvider = ref.read(movieRepositoryProviderProvider);
+    final searchQueryProviderQuery = ref.watch(searchMoviesQueryProvider);
+    final searchQueryProvider = ref.watch(searchMoviesQueryProvider.notifier);
+    
     final colors = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
     return SafeArea(
@@ -33,10 +37,13 @@ class CustomAppBar extends ConsumerWidget {
             IconButton(
                 onPressed: () {
                   showSearch<Movie?>(
+                    query: searchQueryProviderQuery,
                           context: context,
                           delegate: SearchMovieDelegate(
                               searchMoviesCallback:
-                                  movieReposiryProvider.getMoviesBySearchTerm))
+                                  movieReposiryProvider.getMoviesBySearchTerm, 
+                                  searchMoviesQueryCallback: searchQueryProvider.updateSearchQuery
+                                  ))
                       .then((movie) {
                     if (movie == null) return;
 

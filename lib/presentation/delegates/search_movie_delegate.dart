@@ -5,16 +5,18 @@ import 'package:clean_riverpod/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
 typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
+typedef SearchMoviesQueryCallback = void Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   String get searchFieldLabel => 'Search Movie';
 
   final SearchMoviesCallback searchMoviesCallback;
+  final SearchMoviesQueryCallback searchMoviesQueryCallback;
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
   Timer? _debounce;
 
-  SearchMovieDelegate({required this.searchMoviesCallback});
+  SearchMovieDelegate({required this.searchMoviesCallback, required this.searchMoviesQueryCallback});
 
   void _disposeElements(){
     if(!debounceMovies.isClosed) debounceMovies.close();
@@ -29,6 +31,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
         return;
       }
 
+      searchMoviesQueryCallback(query);
       final movies = await searchMoviesCallback(query);
       debounceMovies.add(movies);
     });
