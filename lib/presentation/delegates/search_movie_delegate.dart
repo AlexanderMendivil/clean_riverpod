@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 typedef SearchMoviesQueryCallback = void Function(String query);
+typedef SearchMoviesCachedCallback = void Function(List<Movie> movies);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
@@ -13,10 +14,13 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   final SearchMoviesCallback searchMoviesCallback;
   final SearchMoviesQueryCallback searchMoviesQueryCallback;
+  final SearchMoviesCachedCallback searchMoviesCachedCallback;
+  final List<Movie> movies;
+  final String? cachedQuery;
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
   Timer? _debounce;
 
-  SearchMovieDelegate({required this.searchMoviesCallback, required this.searchMoviesQueryCallback});
+  SearchMovieDelegate({required this.searchMoviesCallback, required this.searchMoviesQueryCallback, required this.searchMoviesCachedCallback, this.movies = const [], this.cachedQuery});
 
   void _disposeElements(){
     if(!debounceMovies.isClosed) debounceMovies.close();
@@ -29,11 +33,13 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       if(query.isEmpty){ 
         debounceMovies.add([]);
         return;
-      }
-
+      }      
+               
+       
       searchMoviesQueryCallback(query);
-      final movies = await searchMoviesCallback(query);
-      debounceMovies.add(movies);
+      final fetchMovies = await searchMoviesCallback(query);
+      searchMoviesCachedCallback(fetchMovies);
+      debounceMovies.add(fetchMovies);
     });
   }
 
@@ -67,7 +73,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
+  Widget buildSuggestions(BuildContext context) {    
     if (query.isEmpty) {
       return const Center(
         child: Text('Search for a movie'),
@@ -79,7 +85,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     return StreamBuilder(
         stream: debounceMovies.stream,
         builder: (_, snapshot) {
-          final movies = snapshot.data ?? [];
+          final movies = snapshot.data ?? [];          
 
           return ListView.builder(
           itemCount: movies!.length,
