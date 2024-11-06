@@ -8,17 +8,16 @@ part 'search_movies_provider.g.dart';
 class SearchMoviesQuery extends _$SearchMoviesQuery {
   
   @override
-  SearchMovieState build(){
-    print("--------------------Recall build");
+  SearchMovieState build(){    
     return SearchMovieState(query: '', movies: []);
-  }
+  }  
 
   void updateSearchQuery(String query){    
-    state = SearchMovieState(query: query);    
+    state = SearchMovieState(query: query, movies: state.movies);    
   }
 
   void cachedMovies(List<Movie> movies){
-    state = SearchMovieState(movies: movies);
+    state = SearchMovieState(movies: movies, query: state.query);
   }
 
 }

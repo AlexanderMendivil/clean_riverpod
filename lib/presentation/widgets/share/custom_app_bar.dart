@@ -14,7 +14,7 @@ class CustomAppBar extends ConsumerWidget {
     final movieReposiryProvider = ref.read(movieRepositoryProviderProvider);
     final searchQueryProviderQuery = ref.watch(searchMoviesQueryProvider);
     final searchQueryProvider = ref.read(searchMoviesQueryProvider.notifier);
-    
+
     final colors = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
     return SafeArea(
@@ -35,23 +35,22 @@ class CustomAppBar extends ConsumerWidget {
             ),
             const Spacer(),
             IconButton(
-                onPressed: () {                  
+                onPressed: () {
                   showSearch<Movie?>(
                     query: searchQueryProviderQuery.query,
-                          context: context,
-                          delegate: SearchMovieDelegate(
-                              searchMoviesCallback:
-                                  movieReposiryProvider.getMoviesBySearchTerm, 
-                                  searchMoviesQueryCallback: searchQueryProvider.updateSearchQuery,
-                                  searchMoviesCachedCallback: searchQueryProvider.cachedMovies,
-                                  movies: searchQueryProviderQuery.movies ?? [],
-                                  cachedQuery: searchQueryProviderQuery.query ?? ''
-                                  ),
-                                  )
-                      .then((movie) {
-                    if (movie == null){                      
-                       return;
-                       }
+                    context: context,
+                    delegate: SearchMovieDelegate(
+                      initialMovies: searchQueryProviderQuery.movies,
+                        searchMoviesCallback: (query) async {
+                          searchQueryProvider.updateSearchQuery(query);                          
+                          final movies = await movieReposiryProvider.getMoviesBySearchTerm(query);
+                          searchQueryProvider.cachedMovies(movies);
+                          return Future.value(movies);
+                        }),
+                  ).then((movie) {
+                    if (movie == null) {
+                      return;
+                    }
 
                     context.push('/movie/${movie.id}');
                   });

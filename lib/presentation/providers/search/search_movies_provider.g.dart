@@ -6,7 +6,7 @@ part of 'search_movies_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$searchMoviesQueryHash() => r'0f32f87d2d303f1eee6b209507a1406e45fadf0a';
+String _$searchMoviesQueryHash() => r'a9797e38dbf20058dd35cca3de47f5ab12731f3b';
 
 /// See also [SearchMoviesQuery].
 @ProviderFor(SearchMoviesQuery)

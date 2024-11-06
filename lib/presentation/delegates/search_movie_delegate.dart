@@ -12,20 +12,18 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   String get searchFieldLabel => 'Search Movie';
 
-  final SearchMoviesCallback searchMoviesCallback;
-  final SearchMoviesQueryCallback searchMoviesQueryCallback;
-  final SearchMoviesCachedCallback searchMoviesCachedCallback;
-  final List<Movie> movies;
-  final String? cachedQuery;
+  final SearchMoviesCallback searchMoviesCallback;    
+  final List<Movie>? initialMovies;
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
   Timer? _debounce;
 
-  SearchMovieDelegate({required this.searchMoviesCallback, required this.searchMoviesQueryCallback, required this.searchMoviesCachedCallback, this.movies = const [], this.cachedQuery});
+  SearchMovieDelegate({required this.searchMoviesCallback, this.initialMovies = const []});
 
   void _disposeElements(){
     if(!debounceMovies.isClosed) debounceMovies.close();
     if(_debounce?.isActive ?? false) _debounce?.cancel();
   }
+
   void _onQueryChange(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
 
@@ -33,12 +31,8 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       if(query.isEmpty){ 
         debounceMovies.add([]);
         return;
-      }      
-               
-       
-      searchMoviesQueryCallback(query);
-      final fetchMovies = await searchMoviesCallback(query);
-      searchMoviesCachedCallback(fetchMovies);
+      }                            
+      final fetchMovies = await searchMoviesCallback(query);      
       debounceMovies.add(fetchMovies);
     });
   }
@@ -84,6 +78,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
     return StreamBuilder(
         stream: debounceMovies.stream,
+        initialData: initialMovies,
         builder: (_, snapshot) {
           final movies = snapshot.data ?? [];          
 
