@@ -13,13 +13,12 @@ class SearchMoviesQuery extends _$SearchMoviesQuery {
   }  
 
   void updateSearchQuery(String query){    
-    state = SearchMovieState(query: query, movies: state.movies);    
+    state.copyWith(query: query);        
   }
 
   void cachedMovies(List<Movie> movies){
-    state = SearchMovieState(movies: movies, query: state.query);
+    state.copyWith(movies: movies);    
   }
-
 }
 
 
