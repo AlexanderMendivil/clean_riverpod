@@ -1,4 +1,3 @@
-import 'package:clean_riverpod/presentation/views/views.dart';
 import 'package:clean_riverpod/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
