@@ -23,15 +23,19 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
         .read(movieDetailNotifierProvider.notifier)
         .loadMovieDetail(widget.movieId, isInitial: true);
 
-        ref.read(actorsProviderProvider.notifier).loadActors(movieId: widget.movieId);
+    ref
+        .read(actorsProviderProvider.notifier)
+        .loadActors(movieId: widget.movieId);
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(movieDetailNotifierProvider);
-    final actors = ref.watch(actorsProviderProvider).actors;    
+    final actors = ref.watch(actorsProviderProvider).actors;
 
-    return state.movie == null || widget.movieId != state.movie!.id.toString() || actors.isEmpty
+    return state.movie == null ||
+            widget.movieId != state.movie!.id.toString() ||
+            actors.isEmpty
         ? const Center(
             child: CircularProgressIndicator(),
           )
@@ -109,7 +113,9 @@ class _MovieDetails extends StatelessWidget {
             ],
           ),
         ),
-        _ActorsByMovie(actors: actors,),
+        _ActorsByMovie(
+          actors: actors,
+        ),
         const SizedBox(height: 100),
       ],
     );
@@ -118,33 +124,34 @@ class _MovieDetails extends StatelessWidget {
 
 class _ActorsByMovie extends StatelessWidget {
   final List<Actor> actors;
-  const _ActorsByMovie({    
+  const _ActorsByMovie({
     required this.actors,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       height: 300,
       child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, int index){    
-        return Container(
-          padding: const EdgeInsets.all(8),
-          width: 135,
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(actors[index].profilePath, height: 150, width: 135, fit: BoxFit.cover),
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (_, int index) {
+            return Container(
+              padding: const EdgeInsets.all(8),
+              width: 135,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(actors[index].profilePath,
+                        height: 150, width: 135, fit: BoxFit.cover),
+                  ),
+                  Text(actors[index].name),
+                  Text(actors[index].character),
+                ],
               ),
-              Text(actors[index].name),
-              Text(actors[index].character),
-            ],
-          ),
-        );
-      }, itemCount: actors.length),
+            );
+          },
+          itemCount: actors.length),
     );
   }
 }
@@ -156,6 +163,14 @@ class _CustomSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      actions: [
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ))
+      ],
       backgroundColor: Colors.black,
       expandedHeight: MediaQuery.sizeOf(context).height * 0.7,
       foregroundColor: Colors.white,
@@ -188,6 +203,18 @@ class _CustomSliverAppBar extends StatelessWidget {
                   decoration: BoxDecoration(
                       gradient:
                           LinearGradient(begin: Alignment.topLeft, stops: [
+                0.0,
+                0.3
+              ], colors: [
+                Colors.black87,
+                Colors.transparent,
+              ]))),
+            ),
+            const SizedBox.expand(
+              child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      gradient:
+                          LinearGradient(begin: Alignment.topRight, stops: [
                 0.0,
                 0.3
               ], colors: [
