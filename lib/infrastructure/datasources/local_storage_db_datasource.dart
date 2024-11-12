@@ -1,12 +1,19 @@
 import 'package:clean_riverpod/domain/datasources/local_storage_datasource.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
+import 'package:isar/isar.dart';
 
 class LocalStorageDbDatasource extends LocalStorageDatasource {
-  
+
+  Isar isar;
+  LocalStorageDbDatasource({required this.isar});
   @override
   Future<void> deleteMovie({int? id}) async {
-    // TODO: implement deleteMovie
-    throw UnimplementedError();
+    try{
+      isar.movies.delete(id!);      
+    }catch(e){
+      throw e;
+    }
+    
   }
 
   @override
