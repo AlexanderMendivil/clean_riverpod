@@ -9,7 +9,10 @@ class LocalStorageDbDatasource extends LocalStorageDatasource {
   @override
   Future<void> deleteMovie({int? id}) async {
     try{
-      isar.movies.delete(id!);      
+
+      await isar.writeAsync((isarAction){
+        isarAction.movies.delete(id!);      
+      }); 
     }catch(e){
       throw e;
     }
@@ -18,8 +21,13 @@ class LocalStorageDbDatasource extends LocalStorageDatasource {
 
   @override
   Future<void> insertMovie({Movie? movie}) async {
-    // TODO: implement insertMovie
-    throw UnimplementedError();
+    try{
+      await isar.writeAsync((isarAction){
+        isar.movies.put(movie!);
+      });
+    }catch(e){
+      throw e;
+    }
   }
 
   @override
@@ -29,9 +37,12 @@ class LocalStorageDbDatasource extends LocalStorageDatasource {
   }
 
   @override
-  Future<List<Movie>> loadMovies({int limit = 10, int offset = 0}) {
-    // TODO: implement loadMovies
-    throw UnimplementedError();
+  Future<List<Movie>> loadMovies({int limit = 10, int offset = 0}) async {
+    try{      
+        return isar.movies.where().findAll(offset: offset, limit: limit);            
+    }catch(e){
+      throw e;
+    }
   }
   
 
