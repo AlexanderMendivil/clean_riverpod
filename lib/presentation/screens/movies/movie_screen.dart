@@ -1,6 +1,7 @@
 import 'package:clean_riverpod/domain/entities/actor.dart';
 import 'package:clean_riverpod/domain/entities/movie.dart';
 import 'package:clean_riverpod/presentation/providers/actors/actors_provider.dart';
+import 'package:clean_riverpod/presentation/providers/movies/favorites/favorites_movies.dart';
 import 'package:clean_riverpod/presentation/providers/movies/movie_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -156,19 +157,31 @@ class _ActorsByMovie extends StatelessWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
   const _CustomSliverAppBar({required this.movie});
 
+  void _onFavoriteTap(bool isFavorite, WidgetRef ref) {
+    if (isFavorite) {
+      ref.read(favoriteMoviesProvider.notifier).removeFavoriteMovie(movie.id);
+    } else {
+      ref.read(favoriteMoviesProvider.notifier).addFavoriteMovie(movie);
+    }
+
+  }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    ref.watch(favoriteMoviesProvider.notifier).movieById(movie.id);
+    final localMovie = ref.watch(favoriteMoviesProvider).isMovieFavorite;
+
     return SliverAppBar(
       actions: [
         IconButton(
-            onPressed: () {},
-            icon: const Icon(
+            onPressed: ()=> _onFavoriteTap(localMovie, ref),
+            icon: Icon(
               Icons.favorite,
-              color: Colors.red,
+              color: localMovie! ? Colors.red : null,
             ))
       ],
       backgroundColor: Colors.black,

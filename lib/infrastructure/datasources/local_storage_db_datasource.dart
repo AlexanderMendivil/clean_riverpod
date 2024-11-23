@@ -22,8 +22,12 @@ class LocalStorageDbDatasource extends LocalStorageDatasource {
   @override
   Future<void> insertMovie({Movie? movie}) async {
     try{
+      
+
       await isar.writeAsync((isarAction){
-        isar.movies.put(movie!);
+
+        print("----------- movie: $movie");
+        isarAction.movies.put(movie!);
       });
     }catch(e){
       throw e;
@@ -32,8 +36,13 @@ class LocalStorageDbDatasource extends LocalStorageDatasource {
 
   @override
   Future<bool> isMovieFavorite({int? id}) async {
-    // TODO: implement isMovieFavorite
-    throw UnimplementedError();
+    try{
+      final movie = isar.movies.get(id!); 
+
+      return movie != null;
+    }catch(e){
+      throw e;
+    }
   }
 
   @override
