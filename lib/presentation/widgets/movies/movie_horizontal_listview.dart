@@ -91,7 +91,10 @@ class _Slide extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: GestureDetector(
-                onTap: () => context.push('/movie/${movie.id}'),
+                onTap: () {
+                  print(movie.id);
+                  context.push('/movie/${movie.id}');
+                  },
                 child: Image.network(
                   movie.posterPath,
                   fit: BoxFit.cover,

@@ -7,7 +7,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
   static int getCurrentIndex(BuildContext context){
     final String location = GoRouterState.of(context).matchedLocation;
 
-print(location);
     switch (location) {
       case '/':
         return 0;
@@ -39,7 +38,7 @@ print(location);
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(      
-      type: BottomNavigationBarType.shifting,
+      type: BottomNavigationBarType.fixed,
       currentIndex: getCurrentIndex(context),
         elevation: 16,
         onTap: (int index) => _onItemTapped(context, index),

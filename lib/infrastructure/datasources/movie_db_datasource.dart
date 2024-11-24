@@ -79,9 +79,8 @@ class MovieDBDataSource extends MovieDataSource {
     try{
 
       final response = await dio.get('/movie/$id');
-
+    
       final movieDB = MovieDetails.fromJson(response.data);
-
       return MovieMapper.movieDetailsToEntity(movieDB);
     }catch(e){
       throw Exception(e);

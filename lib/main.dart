@@ -20,8 +20,7 @@ class MyApp extends ConsumerWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {  
-    print("multile times here");
+  Widget build(BuildContext context, WidgetRef ref) {    
     ref.read(favoriteMoviesProvider.notifier).init();
 
     return MaterialApp.router(
