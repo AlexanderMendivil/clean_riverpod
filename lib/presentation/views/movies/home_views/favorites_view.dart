@@ -18,10 +18,11 @@ class _FavoritesViewsState extends ConsumerState<FavoritesViews> {
   void initState() {
     super.initState();
     ref.read(favoriteMoviesProvider.notifier).loadMovies();
-    movies = ref.read(favoriteMoviesProvider).movies!;
   }
 @override
   Widget build(BuildContext context) {
+    movies = ref.watch(favoriteMoviesProvider).movies!;    
+
     return Scaffold(    
       body: MovieMasonry(movies: movies,),
     );
